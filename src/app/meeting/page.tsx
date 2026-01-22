@@ -9,6 +9,7 @@ import {
   createInsight,
   type InsightCardData,
 } from '@/components/insight-card';
+import { TourProvider } from '@/components/tour';
 import { Button } from '@/components/ui/button';
 import {
   Select,
@@ -21,6 +22,8 @@ import { useBargeIn } from '@/hooks/use-barge-in';
 import { useTranscription } from '@/hooks/use-transcription';
 import { useAIResponseTTS } from '@/hooks/use-tts';
 import { useWakeWord, BUILTIN_KEYWORDS, BuiltInKeyword } from '@/hooks/use-wake-word';
+import { meetingTourSteps } from '@/lib/tour-definitions';
+import { shouldShowTour } from '@/lib/tour-storage';
 
 export default function MeetingPage() {
   // UI State
@@ -266,11 +269,16 @@ export default function MeetingPage() {
   }, [wakeWordState, isMuted, startWakeWord]);
 
   return (
-    <div
-      className="fixed inset-0 flex bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950"
-      role="application"
-      aria-label="AI Meeting Assistant"
+    <TourProvider
+      tourId="meeting"
+      steps={meetingTourSteps}
+      autoStart={shouldShowTour()}
     >
+      <div
+        className="fixed inset-0 flex bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950"
+        role="application"
+        aria-label="AI Meeting Assistant"
+      >
       {/* Skip to main content link for keyboard navigation */}
       <a
         href="#main-content"
@@ -287,6 +295,7 @@ export default function MeetingPage() {
       >
         {/* Status bar */}
         <header
+          data-tour-id="status-bar"
           className="absolute top-4 left-4 right-4 flex items-center justify-between"
           role="banner"
         >
@@ -370,6 +379,7 @@ export default function MeetingPage() {
 
           {/* Settings toggle */}
           <Button
+            data-tour-id="settings-button"
             variant="ghost"
             size="icon"
             onClick={() => setShowSettings(!showSettings)}
@@ -427,11 +437,13 @@ export default function MeetingPage() {
         )}
 
         {/* Breathing orb */}
-        <BreathingOrb
-          state={orbState}
-          audioLevel={audioLevel}
-          size={180}
-        />
+        <div data-tour-id="breathing-orb">
+          <BreathingOrb
+            state={orbState}
+            audioLevel={audioLevel}
+            size={180}
+          />
+        </div>
 
         {/* Current transcription */}
         {transcriptionState === 'recording' && (
@@ -507,6 +519,7 @@ export default function MeetingPage() {
 
         {/* Control buttons */}
         <nav
+          data-tour-id="meeting-controls"
           className="absolute bottom-8 flex items-center gap-4"
           role="toolbar"
           aria-label="Meeting controls"
@@ -529,6 +542,7 @@ export default function MeetingPage() {
 
           {/* Manual record button */}
           <Button
+            data-tour-id="record-button"
             variant={transcriptionState === 'recording' ? 'destructive' : 'default'}
             size="lg"
             onClick={toggleRecording}
@@ -584,6 +598,7 @@ export default function MeetingPage() {
 
       {/* Insights sidebar */}
       <motion.aside
+        data-tour-id="insights-sidebar"
         initial={{ x: 100, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ delay: 0.2 }}
@@ -603,6 +618,7 @@ export default function MeetingPage() {
           ariaLabel="Conversation history and AI responses"
         />
       </motion.aside>
-    </div>
+      </div>
+    </TourProvider>
   );
 }

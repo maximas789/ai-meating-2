@@ -9,6 +9,7 @@ export interface SettingsValues {
   retentionDays: number;
   ttsEnabled: boolean;
   autoTranscribe: boolean;
+  tourEnabled: boolean;
 }
 
 // Default settings values
@@ -19,6 +20,7 @@ export const DEFAULT_SETTINGS: SettingsValues = {
   retentionDays: 90,
   ttsEnabled: true,
   autoTranscribe: true,
+  tourEnabled: true,
 };
 
 export type SettingsKey = keyof SettingsValues;
@@ -82,6 +84,9 @@ export async function getSettings(): Promise<SettingsValues> {
           break;
         case "autoTranscribe":
           result.autoTranscribe = value === "true";
+          break;
+        case "tourEnabled":
+          result.tourEnabled = value === "true";
           break;
       }
     }

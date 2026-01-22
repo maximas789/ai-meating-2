@@ -12,6 +12,7 @@ import {
   Save,
   RotateCcw,
   Shield,
+  HelpCircle,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -32,6 +33,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { resetTour } from "@/lib/tour-storage";
 
 interface SettingsData {
   responseLength: string;
@@ -412,6 +414,30 @@ export default function AdminPage() {
                 days. Set to 0 for indefinite retention.
               </p>
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Product Tour */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <HelpCircle className="h-5 w-5" />
+              Product Tour
+            </CardTitle>
+            <CardDescription>
+              Guided walkthrough of the meeting interface
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button
+              variant="outline"
+              onClick={() => {
+                resetTour();
+                toast.success("Tour reset! Visit the meeting page to start.");
+              }}
+            >
+              Restart Tour
+            </Button>
           </CardContent>
         </Card>
 
