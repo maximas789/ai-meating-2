@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Mic, Radio, MessageSquare, AudioWaveform, Settings } from "lucide-react";
+import { Mic, Radio, FileText, History, Settings } from "lucide-react";
 import { Button } from "./ui/button";
 import { ModeToggle } from "./ui/mode-toggle";
 
@@ -11,16 +11,16 @@ const navLinks = [
     description: "Start a meeting session",
   },
   {
-    href: "/test-transcription",
-    label: "Test Audio",
-    icon: AudioWaveform,
-    description: "Test transcription",
+    href: "/meetings",
+    label: "History",
+    icon: History,
+    description: "Past meetings",
   },
   {
-    href: "/chat",
-    label: "Chat",
-    icon: MessageSquare,
-    description: "AI chat interface",
+    href: "/documents",
+    label: "Documents",
+    icon: FileText,
+    description: "Upload documents for RAG",
   },
   {
     href: "/admin",

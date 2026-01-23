@@ -40,7 +40,8 @@ export function resetCollectionCache(): void {
  */
 export async function extractTextFromPDF(buffer: Buffer): Promise<string> {
   // Dynamic import to avoid build-time initialization issues
-  const pdfParse = require("pdf-parse/lib/pdf-parse");
+  // @ts-expect-error - pdf-parse types don't properly export default for dynamic imports
+  const pdfParse = (await import("pdf-parse")).default;
   const data = await pdfParse(buffer);
   return data.text;
 }
