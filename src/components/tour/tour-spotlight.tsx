@@ -1,6 +1,6 @@
 "use client";
 
-import { useSyncExternalStore, useCallback } from "react";
+import { useSyncExternalStore, useCallback, useRef } from "react";
 import { motion, AnimatePresence, type Transition } from "framer-motion";
 
 interface TourSpotlightProps {
@@ -69,11 +69,19 @@ export function TourSpotlight({
   borderRadius = 8,
   onClick,
 }: TourSpotlightProps) {
-  // Use useSyncExternalStore for viewport size to avoid setState in effect
-  const getViewportSnapshot = useCallback(
-    () => ({ w: window.innerWidth, h: window.innerHeight }),
-    []
-  );
+  // Cache viewport size to avoid infinite loop with useSyncExternalStore
+  const viewportCache = useRef({ w: 0, h: 0 });
+
+  const getViewportSnapshot = useCallback(() => {
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    // Only return new object if values changed
+    if (viewportCache.current.w !== w || viewportCache.current.h !== h) {
+      viewportCache.current = { w, h };
+    }
+    return viewportCache.current;
+  }, []);
+
   const getServerSnapshot = useCallback(() => ({ w: 0, h: 0 }), []);
 
   const viewportSize = useSyncExternalStore(
